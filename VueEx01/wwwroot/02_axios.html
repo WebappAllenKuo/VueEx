@@ -33,6 +33,7 @@
 </div>
 
 <script src="./lib/vue.js"></script>
+<script src="./lib/obs.js"></script> // observer pattern
 <script>
     let data = {
         userId : '',
@@ -48,6 +49,13 @@
         }    
     }
     
+    let subject = waGenericEvent$;
+    subject.register('updateUserInfo', updateUserInfo);
+    
+    function updateUserInfo(newUserInfo){
+        data.userInfo.mergeForm(newUserInfo);
+    }
+    
     let vm = new Vue({
         el : "#app",
         data : data,
@@ -55,13 +63,8 @@
             searchUser : function(){
                 const x = axios('/api/Users?userId=' + this.userId)
                 x.then((response)=>{
-                    // this.userInfo= response.data; // 這麼寫會遺失fullName
-                    // for(let prop in response.data){
-                    //     this.userInfo[prop] = response.data[prop];
-                    // }
-                    
-                    this.userInfo.mergeForm(response.data);
-                    
+                    // this.userInfo.mergeForm(response.data);
+                    subject.notify('updateUserInfo', response.data);
                 });
             }
         },
