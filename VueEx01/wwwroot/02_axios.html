@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Demo 01</title>
+    <link rel="stylesheet" href="./lib/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="./css/site.css">
+    
+    <script src="./lib/jquery/dist/jquery.js"></script>
+    <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<h1>02 axios</h1>
+<p>輸入userId, press search button ,右側可以看到傳回的資訊</p>
+<div id="app" class="container">
+    <div class="row">
+        <div class="col-sm-8">
+            <p>在文字方塊輸入文字，右側span 會即時同步顯示</p>
+            user Id :<input type="text" v-model="userId" class="form-control" /> <br />
+            <button @click="searchUser" class="btn btn-primary">
+                Search</button>
+        </div>
+        <div class="col-sm-4">
+            response data : <span>{{userInfo.fullName()}}</span><br />
+
+        </div>
+    </div>
+</div>
+
+<script src="./lib/vue.js"></script>
+<script>
+    let data = {
+        userId : '',
+        userInfo : {
+            firstName : "",
+            lastName : "",
+            fullName : function(){return this.firstName + ' ' + this.lastName},
+        },
+    };
+    
+    let vm = new Vue({
+        el : "#app",
+        data : data,
+        methods : {
+            searchUser : function(){
+                this.userInfo =  {
+                    firstName : this.userId + " Allen",
+                    lastName : "Kuo",
+                    fullName : function(){return this.firstName + ' ' + this.lastName}
+                };
+            }
+        },
+    });
+</script>
+</body>
+</html>
