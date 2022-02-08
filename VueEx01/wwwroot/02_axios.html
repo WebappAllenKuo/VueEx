@@ -33,7 +33,7 @@
 </div>
 
 <script src="./lib/vue.js"></script>
-<script src="./lib/obs.js"></script> // observer pattern
+<script src="./lib/obs.js"></script> <!--observer pattern-->
 <script>
     let data = {
         userId : '',
@@ -49,11 +49,17 @@
         }    
     }
     
-    let subject = waGenericEvent$;
-    subject.register('updateUserInfo', updateUserInfo);
+    let mySubject = waGenericEvent$;
+    mySubject.register('updateUserInfo', updateUserInfo);
     
     function updateUserInfo(newUserInfo){
         data.userInfo.mergeForm(newUserInfo);
+    }
+    function myAjax(subject, url, subjectKey){
+        const x = axios(url)
+        x.then((response)=>{
+            subject.notify(subjectKey, response.data);
+        });
     }
     
     let vm = new Vue({
@@ -61,11 +67,14 @@
         data : data,
         methods : {
             searchUser : function(){
-                const x = axios('/api/Users?userId=' + this.userId)
-                x.then((response)=>{
-                    // this.userInfo.mergeForm(response.data);
-                    subject.notify('updateUserInfo', response.data);
-                });
+                myAjax(mySubject, 
+                        '/api/Users?userId=' + this.userId, 
+                        'updateUserInfo');
+                
+                // const x = axios('/api/Users?userId=' + this.userId)
+                // x.then((response)=>{
+                //     subject.notify('updateUserInfo', response.data);
+                // });
             }
         },
     });
