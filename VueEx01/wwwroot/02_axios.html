@@ -42,6 +42,11 @@
             fullName : function(){return this.firstName + ' ' + this.lastName},
         },
     };
+    data.userInfo.mergeForm = function(newUserInfo){
+        for(let prop in newUserInfo){
+            data.userInfo[prop] = newUserInfo[prop];
+        }    
+    }
     
     let vm = new Vue({
         el : "#app",
@@ -50,21 +55,19 @@
             searchUser : function(){
                 const x = axios('/api/Users?userId=' + this.userId)
                 x.then((response)=>{
-                    // console.log(response.data);
                     // this.userInfo= response.data; // 這麼寫會遺失fullName
-                    for(let prop in response.data){
-                        this.userInfo[prop] = response.data[prop];
-                    }
+                    // for(let prop in response.data){
+                    //     this.userInfo[prop] = response.data[prop];
+                    // }
+                    
+                    this.userInfo.mergeForm(response.data);
+                    
                 });
-                //
-                // this.userInfo =  {
-                //     firstName : this.userId + " Allen",
-                //     lastName : "Kuo",
-                //     fullName : function(){return this.firstName + ' ' + this.lastName}
-                // };
             }
         },
     });
+    
+    
 </script>
 </body>
 </html>
